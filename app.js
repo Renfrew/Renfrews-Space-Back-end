@@ -49,20 +49,22 @@ app.use(errorHandler);
 let port;
 let server;
 
+debug(`Running on '${process.env.NODE_ENV}' environment`);
+
 // Start HTTPS server on production and test mode
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
   const privateKey = fs.readFileSync(
-    `/etc/letsencrypt/live/<your-awsome-domain>/privkey.pem`,
+    `/etc/letsencrypt/live/${process.env.DOMAIN}/privkey.pem`,
     'utf8'
   );
 
   const certificate = fs.readFileSync(
-    `/etc/letsencrypt/live/<your-awsome-domain>/cert.pem`,
+    `/etc/letsencrypt/live/${process.env.DOMAIN}/cert.pem`,
     'utf8'
   );
 
   const ca = fs.readFileSync(
-    `/etc/letsencrypt/live/<your-awsome-domain>/chain.pem`,
+    `/etc/letsencrypt/live/${process.env.DOMAIN}/chain.pem`,
     'utf8'
   );
 

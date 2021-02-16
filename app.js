@@ -2,7 +2,9 @@ const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const debug = require('debug')('space:server');
+const fs = require('fs');
 const http = require('http');
+const https = require('https');
 
 const apiRouter = require('./src/routes/api');
 
@@ -44,15 +46,47 @@ app.use(errorHandler);
  *
  ********************************************************************* */
 
-// Get port from the environment
-const port = normalizePort(process.env.PORT || '3000');
+let port;
+let server;
 
-// Create HTTP server
-const server = http.createServer(app);
+// Start HTTPS server on production and test mode
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+  const privateKey = fs.readFileSync(
+    `/etc/letsencrypt/live/<your-awsome-domain>/privkey.pem`,
+    'utf8'
+  );
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+  const certificate = fs.readFileSync(
+    `/etc/letsencrypt/live/<your-awsome-domain>/cert.pem`,
+    'utf8'
+  );
+
+  const ca = fs.readFileSync(
+    `/etc/letsencrypt/live/<your-awsome-domain>/chain.pem`,
+    'utf8'
+  );
+
+  const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca,
+  };
+
+  port = normalizePort(process.env.PORT || '443');
+  server = https.createServer(credentials, app);
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+} else {
+  // On development mode, use the http server
+  port = normalizePort(process.env.PORT || '3000');
+  server = http.createServer(app);
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
 
 /** ********************************************************************
  *

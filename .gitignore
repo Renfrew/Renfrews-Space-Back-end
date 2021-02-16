@@ -8,5 +8,8 @@
 #!/.yarn/cache
 /.pnp.*
 
+# Build
+dist
+
 # Misc
 .env

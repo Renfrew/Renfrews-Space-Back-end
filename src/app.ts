@@ -1,13 +1,14 @@
-const createError = require('http-errors');
-const express = require('express');
-const logger = require('morgan');
-const debug = require('debug')('space:server');
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
+import createError from 'http-errors';
+import express from 'express';
+import logger from 'morgan';
+import Debug from 'debug';
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
 
-const apiRouter = require('./src/routes/api');
+import apiRouter from './routes/api';
 
+const debug = Debug('space:server');
 const app = express();
 
 // Middlewares
@@ -45,9 +46,10 @@ app.use(errorHandler);
  * Server Start up
  *
  ********************************************************************* */
+type Port = number | string | boolean;
 
-let port;
-let server;
+let port: Port;
+let server: http.Server | https.Server;
 
 debug(`Running on '${process.env.NODE_ENV}' environment`);
 
@@ -99,7 +101,12 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
 /**
  * Error handler
  */
-function errorHandler(err, req, res, next) {
+function errorHandler(
+  err: createError.HttpError,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
   // send the error
   res.status(err.status || 500).send(err);
 }
@@ -107,7 +114,7 @@ function errorHandler(err, req, res, next) {
 /**
  * Normalize a port into a number, string, or false.
  */
-function normalizePort(val) {
+function normalizePort(val: string): Port {
   const ret_port = parseInt(val, 10);
 
   if (Number.isNaN(ret_port)) {
@@ -126,7 +133,8 @@ function normalizePort(val) {
 /**
  * Event listener for HTTP server "error" event.
  */
-function onError(error) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function onError(error: any) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -155,6 +163,6 @@ function onError(error) {
  */
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr?.port}`;
   debug(`Listening on ${bind}`);
 }

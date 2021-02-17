@@ -10,8 +10,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "nodemon -r dotenv/config ./src/app.js",
-    "deploy": "node -r dotenv/config ./src/app.js",
+    "start": "nodemon -r dotenv/config ./src/app.ts",
+    "build": "tsc",
+    "deploy": "node -r dotenv/config ./dist/app.js",
     "lint": "eslint --ext .js,.ts,.tsx . && prettier --check .",
     "lint:fix": "prettier --write . && eslint --fix",
     "test": "echo 'Error: no test specified' && exit 1"
@@ -42,6 +43,7 @@
     "nodemon": "^2.0.7",
     "prettier": "2.2.1",
     "supports-color": "^8.1.1",
+    "ts-node": "^9.1.1",
     "typescript": "^4.1.5"
   },
   "husky": {

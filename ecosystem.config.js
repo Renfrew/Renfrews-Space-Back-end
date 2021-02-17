@@ -15,7 +15,7 @@ module.exports = {
       repo: 'git@github.com:Renfrew/Renfrews-Space-Back-end.git',
       path: '/home/ubuntu/www/renfrews-space-back-end',
       'pre-deploy-local': '',
-      'post-deploy': 'sudo pm2 reload ecosystem.config.js',
+      'post-deploy': 'yarn build && sudo pm2 reload ecosystem.config.js',
       'pre-setup': '',
     },
   },

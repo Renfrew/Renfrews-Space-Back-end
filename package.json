@@ -2,7 +2,7 @@
   "name": "renfrews-space-back-end",
   "version": "0.1.0",
   "description": "Renfrew's Space Back-end",
-  "main": "app.js",
+  "main": "./src/app.js",
   "author": {
     "name": "Liang Chen (Renfrew)",
     "email": "Renfrew_world@hotmail.com",
@@ -10,8 +10,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "nodemon -r dotenv/config app.js",
-    "deploy": "node -r dotenv/config app.js",
+    "start": "nodemon -r dotenv/config ./src/app.js",
+    "deploy": "node -r dotenv/config ./src/app.js",
     "lint": "eslint --ext .js,.ts,.tsx . && prettier --check .",
     "lint:fix": "prettier --write . && eslint --fix",
     "test": "echo 'Error: no test specified' && exit 1"

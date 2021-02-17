@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon -r dotenv/config app.js",
+    "deploy": "node -r dotenv/config app.js",
     "lint": "eslint --ext .js,.ts,.tsx . && prettier --check .",
     "lint:fix": "prettier --write . && eslint --fix",
     "test": "echo 'Error: no test specified' && exit 1"
